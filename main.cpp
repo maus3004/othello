@@ -2,26 +2,60 @@
 using namespace std;
 
 char EMPTY = 'o', BLACK = 'x', WHITE = '+';
-char board[64];
+// unfinished.. find out if using class is the right way
 
-// create new board
-void initBoard(){
-    // range-based for loop
-    for(char & i : board){
-        i = EMPTY;
-    }
+class BOARD {
+    public:
+        // board size
+        int rows, cols;
 
-    // start the board
-    board[28] = board[37] = WHITE;
-    board[29] = board[36] = BLACK;
-}
+        // create new board
+        // making it so that board size can be altered
+        char** initBoard(int rows, int cols){
+            // allocating memory for rows
+            char** board = new char*[rows];
+
+            // allocating memory for columns in each row
+            for (int i = 0; i < rows; i++) {
+                board[i] = new char[cols];
+            }
+
+            // initializing empty board
+            for(int i = 0; i < rows; i++){
+                for(int j = 0; j < cols; j++){
+                    board[i][j] = EMPTY;
+                }
+            }
+
+            return board;
+        }
+
+        // fixing memory leak
+        void delBoard(char** board, int rows){
+            for(int i = 0; i < rows; i++){
+                delete [] board[i];
+            }
+
+            delete [] board;
+        }
+
+        void printBoard(char** board){
+
+        }
+};
+
 
 // check isFlippable
 
 
 int main() {
-    initBoard();
+    BOARD board;
 
+    int rows = 8, cols = 8;
+
+    char** mainBoard = board.initBoard(rows, cols);
+    board.printBoard(mainBoard);
+    board.delBoard(mainBoard, rows);
     return 0;
 }
 
