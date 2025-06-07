@@ -1,70 +1,75 @@
 #include <iostream>
 using namespace std;
 
-char EMPTY = 'o', BLACK = 'x', WHITE = '+';
-// unfinished.. find out if using class is the right way
+int rows = 8 + 1 + 1, cols = 8 + 1 + 1;
 
-class BOARD {
-    public:
-        // board size
-        int rows, cols;
+// for future reference, char** initBoard() should be looked into...
 
-        // create new board
-        // making it so that board size can be altered
-        char** initBoard(int rows, int cols){
-            // allocating memory for rows
-            char** board = new char*[rows];
-
-            // allocating memory for columns in each row
-            for (int i = 0; i < rows; i++) {
-                board[i] = new char[cols];
-            }
-
-            // initializing empty board
-            for(int i = 0; i < rows; i++){
-                for(int j = 0; j < cols; j++){
-                    board[i][j] = EMPTY;
-                }
-            }
-
-            return board;
+// prints the board
+void printBoard(char** board){
+    for(int i = 0; i < rows; i++){
+        for(int j = 0; j < cols; j++){
+            cout << board[i][j] << "   ";
         }
-
-        // fixing memory leak
-        void delBoard(char** board, int rows){
-            for(int i = 0; i < rows; i++){
-                delete [] board[i];
-            }
-
-            delete [] board;
-        }
-
-        void printBoard(char** board){
-
-        }
-};
-
-
-// check isFlippable
-
-
-int main() {
-    BOARD board;
-
-    int rows = 8, cols = 8;
-
-    char** mainBoard = board.initBoard(rows, cols);
-    board.printBoard(mainBoard);
-    board.delBoard(mainBoard, rows);
-    return 0;
+        cout << endl;
+    }
 }
 
 
-// 01 02 03 04 05 06 07 08
-// 09 10 11 12 13 14 15 16
-// 17 18 19 20 21 22 23 24
-// 25 26 27 28 29 30 31 32
-// 33 34 35 36 37 38 39 40
-// 41 42 43 44 45 46 47 48
-// 49 50 51 52 53 54 55 56
-// 57 58 59 60 61 62 63 64
+// check isValidMove, show validMoves
+
+// make player v player first, black always goes first
+
+
+int main() {
+    // making board
+    // board size
+    // can make board size adjustable in the future
+
+    // board pieces
+    char EMPTY = '*', BLACK = 'X', WHITE = 'O';
+
+    // create a board
+    char** board = new char*[rows];
+
+    // allocating memory for columns in each row
+    for (int i = 0; i < rows; i++) {
+        board[i] = new char[cols];
+    }
+
+    // initializing empty board
+    int border_counter1 = 49, border_counter2 = 49; // char(49) returns 1
+    for(int i = 1; i < rows; i++){
+        // fill the left and top border
+        board[i][0] = board[0][i] = char(border_counter1);
+
+        // fill the right and bottom border
+        for(int j = 1; j < cols; j++){
+            board[i][j] = EMPTY;
+            if(j == cols - 1){
+                board[i][j] = char(border_counter1); // fills right border
+            }
+            if(i == rows - 1){
+                board[i][j] = char(border_counter2);
+                border_counter2++;
+            }
+        }
+        border_counter1++;
+    }
+
+    board[0][0] = board[0][9] = board[9][0] = board[9][9] = '#';
+    // have to switch in case
+    board[4][4] = board[5][5] = WHITE;
+    board[5][4] = board[4][5] = BLACK;
+
+    printBoard(board);
+
+    // deleting board from memory
+    for(int i = 0; i < rows; i++){
+        delete[] board[i];
+    }
+
+    delete[] board;
+
+    return 0;
+}
